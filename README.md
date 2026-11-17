@@ -9,8 +9,8 @@ records. No account, no cost, and your answers never leave your computer.
 ### 👉 [Start your assessment](https://chisom303.github.io/open-clinic-sra/) · [See a sample report (PDF)](docs/sample-report.pdf)
 
 [![CI](https://github.com/Chisom303/open-clinic-sra/actions/workflows/ci.yml/badge.svg)](https://github.com/Chisom303/open-clinic-sra/actions/workflows/ci.yml)
-[![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
-![Version 1.0.0](https://img.shields.io/badge/version-1.0.0-blue.svg)
+[![License: Apache 2.0](https://img.shields.io/badge/license-Apache%202.0-green.svg)](LICENSE)
+![Version 1.1.0](https://img.shields.io/badge/version-1.1.0-blue.svg)
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.24206639.svg)](https://doi.org/10.5281/zenodo.24206639)
 
 > ⚠️ **Not legal advice and not a compliance certification.** This is a
@@ -131,7 +131,7 @@ tools, and is open source so anyone can review or improve it.
   to their records.
 - Mark yourself as **an outside consultant** on the start page; it appears on
   the report.
-- The tool is MIT-licensed. You may use it with clients, including as part of
+- The tool is licensed under Apache 2.0. You may use it with clients, including as part of
   paid services. Contributions that improve accuracy are very welcome.
 
 ## Feedback and help
@@ -166,7 +166,7 @@ please cite it. Click **Cite this repository** on the right side of the GitHub
 page for APA and BibTeX formats, or use:
 
 > Alozie, C. (2026). *Open Clinic SRA: A free, open-source HIPAA Security Risk
-> Assessment for small and rural medical practices* (Version 1.0.0) [Computer
+> Assessment for small and rural medical practices* (Version 1.1.0) [Computer
 > software]. Zenodo. https://doi.org/10.5281/zenodo.24206639
 
 Citation details are kept in [CITATION.cff](CITATION.cff).
@@ -220,5 +220,8 @@ The app deploys to GitHub Pages automatically on every push to `main`
 
 ## License
 
-- Code: [MIT](LICENSE)
+- Code: [Apache License 2.0](LICENSE). If you share or build on it, keep the
+  [NOTICE](NOTICE) file and state what you changed. The license does not grant
+  use of the name "Open Clinic SRA" to imply endorsement.
+- Versions up to and including 1.0.0 were released under the MIT License.
 - Question bank and documentation (`content/`, `docs/`): [CC BY 4.0](LICENSE-CONTENT)

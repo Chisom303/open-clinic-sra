@@ -49,6 +49,13 @@ npm test
 - Add tests for any scoring change.
 - The app must never send assessment answers to any server.
 
+## Licensing of contributions
+
+By contributing, you agree that your code contributions are licensed under the
+[Apache License 2.0](LICENSE), and contributions to the question bank and
+documentation under [CC BY 4.0](LICENSE-CONTENT), the same terms as the rest of
+the project.
+
 ## Code of conduct
 
 Participation in this project is governed by [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md).
