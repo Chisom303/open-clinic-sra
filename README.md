@@ -45,6 +45,8 @@ options are either expensive or hard to use without an IT background.
 |---|---|
 | **38 plain-language questions** | Written for a practice manager, not a security engineer. Each one explains what it means and why it matters. |
 | **A risk rating** | Low, Medium or High overall and for each area, based on how likely and how harmful each gap is. |
+| **Charts you can read at a glance** | A risk heat map (likelihood × impact) and a timeline of what to fix first, on screen and in the printed report. |
+| **Plain-language terms** | Tap or hover over terms like EHR, ePHI, BAA and MFA to see what they mean; a glossary is on the start page and in the report. |
 | **A prioritized action plan** | Every gap comes with how to fix it and a suggested deadline. The most serious gaps come first. |
 | **A signed report** | Cover page, method, results, risk management plan, and attestation with signature lines. Print it or save it as a PDF. |
 | **Next year, update instead of restart** | Save your assessment as a file and load it next year to update it. |
@@ -61,6 +63,8 @@ options are either expensive or hard to use without an IT background.
 | Policies and incident response | Incident response plan, breach notification |
 | Documentation | Written policies, 6-year record retention |
 | **AI tools** | AI scribes and coding tools, AI vendor agreements, staff use of public chatbots |
+
+![Risk heat map and remediation timeline on the results page](docs/images/risk-picture.png)
 
 ![A question with its plain-language explanation, regulation citation and proposed-rule note](docs/images/question.png)
 

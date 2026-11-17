@@ -102,6 +102,8 @@ export function scoreAssessment(questions, answers) {
         why: q.why,
         fix: q.fix,
         fix_within_days: q.fix_within_days,
+        likelihood: q.likelihood,
+        impact: q.impact,
       };
       findings.push(finding);
 

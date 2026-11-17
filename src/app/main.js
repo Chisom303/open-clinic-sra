@@ -2,6 +2,8 @@ import content from '../generated/content.json';
 import { scoreAssessment } from '../scoring.mjs';
 import { emptyAssessment, loadSaved, save, clearSaved, exportFile, parseImport } from './storage.js';
 import { trackPage, trackEvent, EVENTS } from './analytics.js';
+import { annotate, glossaryList } from './glossary.js';
+import { heatMap, timeline, areaBars } from './visuals.js';
 
 const FEEDBACK_URL = 'https://github.com/Chisom303/open-clinic-sra/issues/new?template=feedback.yml';
 const FEEDBACK_EMAIL = 'Aloziechisom23@gmail.com';
@@ -105,6 +107,12 @@ function viewWelcome() {
     </div>
   </form>
 
+  <details class="card terms">
+    <summary><strong>Terms used in this assessment</strong> <span class="terms-hint">EHR, ePHI, BAA, MFA and more</span></summary>
+    ${glossaryList()}
+    <p class="fine">Tip: tap or hover over an underlined term in any question to see what it means.</p>
+  </details>
+
   <section class="card subtle">
     <h2>Have a file from last time?</h2>
     <p>Load a saved assessment file to continue it or update it for this year.</p>
@@ -137,8 +145,8 @@ function questionCard(q, index) {
   const opts = ['yes', 'partial', 'no', ...(q.allow_na ? ['na'] : [])];
   return `
   <fieldset class="question ${current ? 'answered' : ''}" id="${q.id}">
-    <legend><span class="qnum">${index + 1}</span> ${esc(q.text)}</legend>
-    <p class="help">${esc(q.help)}</p>
+    <legend><span class="qnum">${index + 1}</span> ${annotate(esc(q.text))}</legend>
+    <p class="help">${annotate(esc(q.help))}</p>
     <div class="choices" role="radiogroup">
       ${opts
         .map(
@@ -150,10 +158,10 @@ function questionCard(q, index) {
     </div>
     <details class="more">
       <summary>Why this matters</summary>
-      <p>${esc(q.why)}</p>
+      <p>${annotate(esc(q.why))}</p>
       <p class="cite">Source: ${esc(q.citation)}${q.critical ? ' · <strong>critical safeguard</strong>' : ''}</p>
       <p class="impl">${IMPLEMENTATION_TEXT[q.implementation] ?? ''}</p>
-      ${q.proposed_rule_2025?.affected ? `<p class="proposed"><strong>Proposed rule (not final):</strong> ${esc(q.proposed_rule_2025.note)}</p>` : ''}
+      ${q.proposed_rule_2025?.affected ? `<p class="proposed"><strong>Proposed rule (not final):</strong> ${annotate(esc(q.proposed_rule_2025.note))}</p>` : ''}
     </details>
   </fieldset>`;
 }
@@ -208,10 +216,10 @@ function viewResults() {
           <span class="badge ${f.severity}">${SEVERITY_LABEL[f.severity]}</span>
           <span class="due">Fix within ${f.fix_within_days} days</span>
         </div>
-        <h3>${esc(f.text)}</h3>
+        <h3>${annotate(esc(f.text))}</h3>
         <p class="your-answer">Your answer: <strong>${ANSWER_LABEL[f.answer]}</strong> · <span class="cite">${esc(f.citation)}</span></p>
-        <p><strong>Why it matters:</strong> ${esc(f.why)}</p>
-        <p><strong>How to fix:</strong> ${esc(f.fix)}</p>
+        <p><strong>Why it matters:</strong> ${annotate(esc(f.why))}</p>
+        <p><strong>How to fix:</strong> ${annotate(esc(f.fix))}</p>
       </li>`,
     )
     .join('');
@@ -240,6 +248,11 @@ function viewResults() {
         : ''
     }
   </section>
+
+  ${r.findings.length ? `<section class="card">
+    <h2>Your risk picture</h2>
+    <div class="viz-grid">${heatMap(r.findings)}${timeline(r.findings)}</div>
+  </section>` : ''}
 
   <section class="card">
     <h2>By section</h2>
@@ -296,7 +309,7 @@ function viewReport() {
       (f, i) => `<tr>
         <td class="num">${i + 1}</td>
         <td><span class="badge ${f.severity}">${SEVERITY_LABEL[f.severity]}</span></td>
-        <td><strong>${esc(f.text)}</strong><br /><span class="cite">${esc(f.id)} · ${esc(f.citation)} · Answer: ${ANSWER_LABEL[f.answer]}</span><br />${esc(f.fix)}</td>
+        <td><strong>${annotate(esc(f.text))}</strong><br /><span class="cite">${esc(f.id)} · ${esc(f.citation)} · Answer: ${ANSWER_LABEL[f.answer]}</span><br />${annotate(esc(f.fix))}</td>
         <td>${f.fix_within_days} days</td>
         <td class="blank"></td>
         <td class="blank"></td>
@@ -354,13 +367,19 @@ function viewReport() {
       </ul>
     </section>
 
-    <section>
+    <section class="keep-together">
       <h2>2. Results by area</h2>
+      ${areaBars(sections, r.sections)}
       <table class="report-table"><thead><tr><th>Area</th><th>Questions</th><th>N/A</th><th>Risk remaining</th><th>Rating</th></tr></thead><tbody>${sectionRows}</tbody></table>
     </section>
 
+    ${r.findings.length ? `<section>
+      <h2>3. Risk profile</h2>
+      <div class="viz-grid">${heatMap(r.findings)}${timeline(r.findings)}</div>
+    </section>` : ''}
+
     <section>
-      <h2>3. Risk management plan</h2>
+      <h2>${r.findings.length ? 4 : 3}. Risk management plan</h2>
       ${
         rows
           ? `<p>Findings in priority order. Assign an owner and target date to each, and record completion.</p>
@@ -370,7 +389,7 @@ function viewReport() {
     </section>
 
     <section class="signoff">
-      <h2>4. Review and approval</h2>
+      <h2>${r.findings.length ? 5 : 4}. Review and approval</h2>
       <p>I attest that the information in this assessment is true and complete to the best of my knowledge, that I have reviewed the risk management plan above, and that this assessment will be retained for at least six years as required by 45 CFR 164.316(b)(2)(i).</p>
       <div class="sig-grid">
         <div><span class="line"></span>Security Officer — printed name</div>
@@ -381,6 +400,11 @@ function viewReport() {
         <div><span class="line"></span>Date</div>
       </div>
       <p>Next review due: within 12 months of the date above, or sooner after a major change or security incident.</p>
+    </section>
+
+    <section class="appendix">
+      <h2>Appendix: Terms used</h2>
+      ${glossaryList('glossary report-glossary')}
     </section>
 
     <footer class="report-foot">
@@ -462,6 +486,47 @@ main.addEventListener('click', (e) => {
 });
 
 window.addEventListener('hashchange', render);
+
+// ---------- term definitions (hover, focus, or tap) ----------
+const tip = Object.assign(document.createElement('div'), { className: 'term-tip', id: 'term-tip', role: 'tooltip' });
+tip.hidden = true;
+document.body.append(tip);
+let tipFor = null;
+let shownAt = 0;
+function showTip(el) {
+  if (tipFor !== el || tip.hidden) shownAt = Date.now();
+  tipFor = el;
+  tip.textContent = el.dataset.def;
+  tip.hidden = false;
+  el.setAttribute('aria-describedby', 'term-tip');
+  const r = el.getBoundingClientRect();
+  const w = tip.offsetWidth;
+  const h = tip.offsetHeight;
+  const left = Math.min(Math.max(8, r.left + r.width / 2 - w / 2), window.innerWidth - w - 8);
+  const top = r.top - h - 8 < 8 ? r.bottom + 8 : r.top - h - 8;
+  tip.style.left = `${left}px`;
+  tip.style.top = `${top}px`;
+}
+function hideTip() {
+  if (tipFor) tipFor.removeAttribute('aria-describedby');
+  tipFor = null;
+  tip.hidden = true;
+}
+document.addEventListener('mouseover', (e) => { const t = e.target.closest?.('.term'); if (t) showTip(t); });
+document.addEventListener('mouseout', (e) => { if (e.target.closest?.('.term') && document.activeElement !== tipFor) hideTip(); });
+document.addEventListener('focusin', (e) => { const t = e.target.closest?.('.term'); if (t) showTip(t); });
+document.addEventListener('focusout', (e) => { if (e.target.closest?.('.term')) hideTip(); });
+document.addEventListener('click', (e) => {
+  const t = e.target.closest?.('.term');
+  if (t) {
+    e.preventDefault();
+    // A tap also fires focus/hover just before the click; only a later click toggles it off.
+    if (tipFor === t && !tip.hidden && Date.now() - shownAt > 400) hideTip();
+    else showTip(t);
+  } else hideTip();
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideTip(); });
+window.addEventListener('scroll', hideTip, { passive: true });
 // Counts printing from the report page, whether via the button or Ctrl+P.
 window.addEventListener('beforeprint', () => {
   if ((location.hash || '').startsWith('#/report')) trackEvent(EVENTS.reportPrinted);

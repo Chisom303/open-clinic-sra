@@ -316,3 +316,79 @@ input:focus-visible, .btn:focus-visible, a:focus-visible, summary:focus-visible 
 
 .feedback { border-color: var(--brand); }
 @media print { .feedback { display: none !important; } }
+
+/* ---------- Term definitions ---------- */
+.term { text-decoration: underline dotted; text-underline-offset: 3px; text-decoration-thickness: 1px; cursor: help; border: none; }
+.term:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; border-radius: 2px; }
+.term-tip {
+  position: fixed; z-index: 30; max-width: min(300px, calc(100vw - 16px));
+  background: var(--text); color: var(--bg); font-size: 0.86rem; line-height: 1.45;
+  padding: 8px 11px; border-radius: 8px; box-shadow: 0 6px 20px rgb(0 0 0 / 0.2); pointer-events: none;
+}
+.terms summary { cursor: pointer; list-style: none; display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
+.terms summary::-webkit-details-marker { display: none; }
+.terms summary::before { content: '▸'; color: var(--brand); }
+.terms[open] summary::before { content: '▾'; }
+.terms-hint { color: var(--muted); font-size: 0.88rem; }
+.glossary { display: grid; gap: 10px; margin: 14px 0 0; }
+.glossary div { display: grid; grid-template-columns: 64px 1fr; gap: 10px; }
+.glossary dt { font-weight: 700; color: var(--brand); }
+.glossary dd { margin: 0; font-size: 0.93rem; }
+
+/* ---------- Charts ---------- */
+.viz-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; align-items: start; }
+.viz { margin: 0; }
+.viz svg { width: 100%; max-width: 360px; height: auto; display: block; overflow: visible; }
+.viz-wide svg { max-width: 560px; }
+.viz-title { font-weight: 700; margin-bottom: 8px; }
+.viz-note { font-size: 0.86rem; color: var(--muted); margin: 8px 0 0; max-width: 46ch; }
+.viz-label { font-size: 11px; fill: var(--muted); font-family: var(--font); }
+.viz-axis { font-size: 11px; font-weight: 700; fill: var(--text); font-family: var(--font); }
+.viz-count { font-size: 12px; font-weight: 700; fill: var(--text); font-family: var(--font); }
+.viz-track { fill: var(--surface-2); }
+.hm-count { font-size: 20px; font-weight: 800; fill: var(--text); font-family: var(--font); }
+.hm-zero { fill: var(--muted); font-weight: 500; }
+.hm-empty { fill: var(--surface-2); }
+.hm-low { fill: var(--low-soft); stroke: var(--low); }
+.hm-medium { fill: var(--medium-soft); stroke: var(--medium); }
+.hm-high { fill: var(--high-soft); stroke: var(--high); }
+.sev-critical { fill: var(--critical); }
+.sev-high { fill: var(--high); }
+.sev-medium { fill: var(--medium); }
+.sev-low { fill: var(--low); }
+.lvl-low { fill: var(--low); }
+.lvl-medium { fill: var(--medium); }
+.lvl-high { fill: var(--high); }
+
+/* Report: fixed light palette so charts print the same in light or dark mode */
+.report .viz-label { fill: #555; }
+.report .viz-axis, .report .viz-count, .report .hm-count { fill: #1a1a1a; }
+.report .hm-zero { fill: #888; }
+.report .viz-track, .report .hm-empty { fill: #eef1ef; }
+.report .hm-low { fill: #e3f3e8; stroke: #2e7d4f; }
+.report .hm-medium { fill: #fbf0dc; stroke: #a8650b; }
+.report .hm-high { fill: #fbe5e3; stroke: #b3261e; }
+.report .sev-critical { fill: #7d1a14; }
+.report .sev-high, .report .lvl-high { fill: #b3261e; }
+.report .sev-medium, .report .lvl-medium { fill: #a8650b; }
+.report .sev-low, .report .lvl-low { fill: #2e7d4f; }
+.report .viz-note { color: #555; }
+.report .viz { margin-bottom: 14px; }
+.report .glossary dt { color: #1f6f5c; }
+.report .glossary dd { font-size: 0.86rem; }
+.report .term { text-decoration: none; cursor: auto; }
+.appendix { break-inside: avoid; }
+
+@media print {
+  .term-tip { display: none !important; }
+  .term { text-decoration: none; }
+  .report h2 { break-after: avoid; }
+  .report .viz, .keep-together { break-inside: avoid; }
+  .viz svg { max-width: 300px; }
+  .viz-wide svg { max-width: 520px; }
+}
+@media (prefers-color-scheme: dark) {
+  /* Keep Critical clearly distinct from High in charts (badges keep their own colors). */
+  .sev-critical { fill: #d6342c; }
+  .report .sev-critical { fill: #7d1a14; }
+}
