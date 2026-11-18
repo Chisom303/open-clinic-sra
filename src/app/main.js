@@ -87,7 +87,7 @@ function viewWelcome() {
   <form class="card" id="practice-form">
     <h2>About this assessment</h2>
     <label>Practice name
-      <input name="name" maxlength="120" autocomplete="organization" value="${esc(state.practice.name)}" placeholder="e.g. Riverside Family Medicine" />
+      <input name="name" maxlength="120" autocomplete="organization" value="${esc(state.practice.name)}" placeholder="e.g. Sample Family Practice" />
     </label>
     <label>Completed by (name and role)
       <input name="assessor" maxlength="120" value="${esc(state.practice.assessor)}" placeholder="e.g. Jordan Lee, Practice Manager" />

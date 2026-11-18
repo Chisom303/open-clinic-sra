@@ -7,14 +7,14 @@ test('only allow-listed paths are counted', () => {
   assert.ok(isAllowed('/results'));
   assert.ok(isAllowed('/section/technical'));
   assert.ok(isAllowed(EVENTS.reportPrinted));
-  assert.ok(!isAllowed('/section/Riverside Family'));
+  assert.ok(!isAllowed('/section/Sample Family Practice'));
   assert.ok(!isAllowed('TEC-004=no'));
-  assert.ok(!isAllowed('/results?practice=SMC'));
+  assert.ok(!isAllowed('/results?practice=Example'));
 });
 
 test('anything outside the allow-list is never queued', () => {
   _reset();
-  trackPage('/practice/SMC Family Clinic');
+  trackPage('/practice/Example Clinic');
   trackEvent('answer:TEC-004:no');
   assert.equal(_queue.length, 0);
 });
