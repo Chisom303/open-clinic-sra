@@ -392,3 +392,7 @@ input:focus-visible, .btn:focus-visible, a:focus-visible, summary:focus-visible 
   .sev-critical { fill: #d6342c; }
   .report .sev-critical { fill: #7d1a14; }
 }
+
+.completion { border-color: var(--brand); background: var(--brand-soft); }
+.completion .optional { font-size: 0.8rem; font-weight: 500; }
+@media print { .completion { display: none !important; } }

@@ -274,6 +274,8 @@ function viewResults() {
     <p class="fine">This is a structured self-assessment, not legal advice and not a certification of HIPAA compliance. See the methodology and disclaimer in the project repository.</p>
   </section>
 
+  ${r.complete ? completionCard() : ''}
+
   <section class="card feedback">
     <h2>Did this help?</h2>
     <p>This free tool improves with feedback from practices and IT providers. Tell us what worked, what was confusing, or what's missing. Please don't include patient information.</p>
@@ -284,6 +286,28 @@ function viewResults() {
   </section>
 
   ${resourcesCard()}`;
+}
+
+// Optional, user-initiated: opens a pre-filled email the practice can review and choose to send.
+// Nothing is sent automatically, and no answers or results are included.
+function completionCard() {
+  const date = new Date(state.updatedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' });
+  const role = { internal: 'Practice staff', external: 'Outside consultant' }[state.practice.assessorType] ?? '';
+  const body = [
+    `Practice name: ${state.practice.name || ''}`,
+    `Assessment completed on: ${date}`,
+    `Completed by: ${role}`,
+    `Practice size (optional, e.g. 3 providers): `,
+    `May we mention your practice as a user of Open Clinic SRA? (Yes / No): `,
+    '',
+    'This email contains no assessment answers or results.',
+  ].join('\n');
+  const href = `mailto:${FEEDBACK_EMAIL}?subject=${encodeURIComponent('Open Clinic SRA: assessment completed')}&body=${encodeURIComponent(body)}`;
+  return `<section class="card completion">
+    <h2>Let us know you completed it <span class="optional">optional</span></h2>
+    <p>Open Clinic SRA is free and independently maintained. Hearing which practices use it helps keep it going. This opens an email with your practice name and the completion date, which you can edit before sending. Your answers and results are never included, and nothing is sent unless you send it.</p>
+    <div class="actions"><a class="btn ghost" id="share-completion" href="${href}">Tell us by email</a></div>
+  </section>`;
 }
 
 function resourcesCard() {
@@ -408,7 +432,7 @@ function viewReport() {
     </section>
 
     <footer class="report-foot">
-      Prepared with Open Clinic SRA, a free open-source tool. This report is a structured self-assessment to support the practice's HIPAA risk analysis. It is not legal advice and does not certify HIPAA compliance. Keep this report for at least 6 years (45 CFR 164.316(b)(2)).
+      Prepared with Open Clinic SRA © 2026 Chisom Alozie, a free open-source tool licensed under Apache 2.0. This report is a structured self-assessment to support the practice's HIPAA risk analysis. It is not legal advice and does not certify HIPAA compliance. Keep this report for at least 6 years (45 CFR 164.316(b)(2)).
     </footer>
   </article>`;
 }
@@ -476,6 +500,7 @@ main.addEventListener('click', (e) => {
     showToast('Saved. Store this file with your HIPAA records.');
   }
   if (e.target.id === 'feedback' || e.target.id === 'feedback-email') trackEvent(EVENTS.feedbackClicked);
+  if (e.target.id === 'share-completion') trackEvent(EVENTS.completionShared);
   if (e.target.id === 'reset') {
     if (confirm('Erase all answers saved on this device? Save to file first if you want to keep them.')) {
       clearSaved();

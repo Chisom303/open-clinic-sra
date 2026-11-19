@@ -97,6 +97,10 @@ back later on the same computer.
   [`src/app/analytics.js`](src/app/analytics.js) and enforced by tests. Like any
   website, the counter's server briefly receives your browser's network address
   when it loads. Content blockers that block GoatCounter don't affect the tool.
+- **Telling us you used it is optional.** After a completed assessment, the
+  results page offers a pre-filled email with your practice name and the date.
+  You can edit it, and nothing is sent unless you choose to send it. It never
+  includes your answers or results.
 
 ## How scoring works
 
@@ -219,6 +223,9 @@ The app deploys to GitHub Pages automatically on every push to `main`
 (**Settings → Pages → Source: GitHub Actions**).
 
 ## License
+
+© 2026 Chisom Alozie. "Open Clinic SRA" is the name of this project.
+
 
 - Code: [Apache License 2.0](LICENSE). If you share or build on it, keep the
   [NOTICE](NOTICE) file and state what you changed. The license does not grant

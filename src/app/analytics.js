@@ -18,6 +18,7 @@ export const EVENTS = Object.freeze({
   fileSaved: 'file-saved',
   fileLoaded: 'file-loaded',
   feedbackClicked: 'feedback-clicked',
+  completionShared: 'completion-shared',
 });
 
 const ALLOWED = new Set([...Object.values(PAGES), ...Object.values(EVENTS)]);
